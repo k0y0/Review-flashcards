@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block body %}
+    identyfikator testu: <b>{{ testId }}</b>
+    {% if not question %}
+        <div class="row my-5">
+            <p>Ukończono z wynikiem: <b>{{ counter.correct }} / {{ counter.all }}</b></p>
+            <hr>
+            <form action="{{ url("app_begin_new_test") }}" method="post">
+                <input class="btn btn-outline-primary" type="submit" value="Zacznij nowy">
+            </form>
+            <hr>
+            <a class="btn btn-outline-warning" href="{{ url("app_test_history") }}">Zobacz historię</a>
+        </div>
+    {% else %}
+        <div class="row my-5">
+            <div class="col-md">
+                <h1>Pytanie {{ counter.current }} / {{ counter.all }}</h1>
+            </div>
+        </div>
+        {% if question.type %}
+            <div class="row">
+                <div class="col-md">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Jaka jest stolica tego kraju?</h3>
+                        </div>
+                        <div class="card-body">
+                            <h1>{{ question.country.name }}</h1>
+                            <div>
+                                <button class="btn btn-primary" type="button">Sprawdź</button>
+                                <div data-answer>
+                                    <span>Poprawna odpowiedź to: <b>{{ question.country.capital }}</b></span>
+                                    <form method="post" action="{{ path("app_submit_answer") }}">
+                                        <input type="hidden" name="uId" value="{{ testId }}">
+                                        <input type="hidden" name="qId" value="{{ question.id }}">
+                                        <button name="answer" class="btn btn-outline-success" value="true">Poprawnie</button>
+                                        <button name="answer" class="btn btn-outline-danger" value="false">Źle</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-md">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Do jakiego kraju należy ta flaga?</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="w-50 mx-auto">
+                                <img class="img-fluid" src="{{ url("app_index") }}/flags/{{ question.country.flag }}" alt="country_flag">
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" type="button">Sprawdź</button>
+                                <div data-answer>
+                                    <span>Poprawna odpowiedź to: <b>{{ question.country.name }}</b></span>
+                                    <form method="post" action="{{ path("app_submit_answer") }}">
+                                        <input type="hidden" name="uId" value="{{ testId }}">
+                                        <input type="hidden" name="qId" value="{{ question.id }}">
+                                        <button name="answer" class="btn btn-outline-success" value="true">Poprawnie</button>
+                                        <button name="answer" class="btn btn-outline-danger" value="false">Źle</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
